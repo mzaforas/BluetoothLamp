@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.mzaforas.BluetoothLamp;
+package com.example.android.BluetoothChat;
 
 import java.util.Set;
 
-import com.mzaforas.BluetoothLamp.R;
+import com.example.android.BluetoothChat.R;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
