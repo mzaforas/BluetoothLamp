@@ -70,6 +70,8 @@ public class BluetoothChat extends Activity {
     private ListView mConversationView;
     private EditText mOutEditText;
     private Button mSendButton;
+    private Button onButton;
+    private Button offButton;    
 
     // Name of the connected device
     private String mConnectedDeviceName = null;
@@ -170,6 +172,26 @@ public class BluetoothChat extends Activity {
 
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
+        
+        // ArduBluetooth extended (mzaforas)
+        onButton = (Button) findViewById(R.id.button_on);
+        onButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                sendMessage("n");
+            }
+        });
+        
+        offButton = (Button) findViewById(R.id.button_off);
+        offButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                sendMessage("f");
+            }
+        });
+
+        // Try connect to linvor (Arduino BT adapter)
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("00:12:03:27:93:82");
+        // Attempt to connect to the device via insecure
+        mChatService.connect(device, false);
     }
 
     @Override
@@ -192,6 +214,8 @@ public class BluetoothChat extends Activity {
         if(D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
+    // TODO: delete
+    /*
     private void ensureDiscoverable() {
         if(D) Log.d(TAG, "ensure discoverable");
         if (mBluetoothAdapter.getScanMode() !=
@@ -201,6 +225,7 @@ public class BluetoothChat extends Activity {
             startActivity(discoverableIntent);
         }
     }
+    */
 
     /**
      * Sends a message.
@@ -347,10 +372,13 @@ public class BluetoothChat extends Activity {
             serverIntent = new Intent(this, DeviceListActivity.class);
             startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
             return true;
+        // TODO: delete
+        /*
         case R.id.discoverable:
             // Ensure this device is discoverable by others
             ensureDiscoverable();
             return true;
+        */
         }
         return false;
     }

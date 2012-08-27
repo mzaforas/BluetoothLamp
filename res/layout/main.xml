@@ -19,6 +19,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button android:id="@+id/button_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/turn_on"
+        />
+        <Button android:id="@+id/button_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/turn_off"
+        />
+        
+    </LinearLayout>
     <ListView android:id="@+id/in"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
