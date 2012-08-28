@@ -36,10 +36,12 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 /**
  * This is the main Activity that displays the current chat session.
@@ -71,7 +73,9 @@ public class BluetoothChat extends Activity {
     private EditText mOutEditText;
     private Button mSendButton;
     private Button onButton;
-    private Button offButton;    
+    private Button offButton;
+    private ToggleButton toggleButton;
+    
 
     // Name of the connected device
     private String mConnectedDeviceName = null;
@@ -174,17 +178,33 @@ public class BluetoothChat extends Activity {
         mOutStringBuffer = new StringBuffer("");
         
         // ArduBluetooth extended (mzaforas)
-        onButton = (Button) findViewById(R.id.button_on);
+        onButton = (Button) findViewById(R.id.button_on_when);
         onButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                sendMessage("n");
+                sendMessage("t");
+                TextView view = (TextView) findViewById(R.id.time);
+                Integer minutes = Integer.parseInt(view.getText().toString());
+                sendInteger(minutes);
             }
         });
         
-        offButton = (Button) findViewById(R.id.button_off);
+        offButton = (Button) findViewById(R.id.button_off_when);
         offButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                sendMessage("f");
+                sendMessage("t");
+            }
+        });
+
+        toggleButton = (ToggleButton) findViewById(R.id.button_on_off);
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                	sendMessage("n");
+                } else {
+                    // The toggle is disabled
+                	sendMessage("f");
+                }
             }
         });
 
@@ -248,6 +268,28 @@ public class BluetoothChat extends Activity {
             mOutStringBuffer.setLength(0);
             mOutEditText.setText(mOutStringBuffer);
         }
+    }
+    
+    /**
+     * Sends a number.
+     * @param number  An integer to send.
+     */
+    private void sendInteger(Integer number) {
+        // Check that we're actually connected before trying anything
+        if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Get the message bytes and tell the BluetoothChatService to write
+        byte[] send = new byte[1]; 
+        send[0] = number.byteValue();
+        mChatService.write(send);
+
+        // Reset out string buffer to zero and clear the edit text field
+        mOutStringBuffer.setLength(0);
+        mOutEditText.setText(mOutStringBuffer);
+        
     }
 
     // The action listener for the EditText widget, to listen for the return key
@@ -361,25 +403,31 @@ public class BluetoothChat extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent serverIntent = null;
-        switch (item.getItemId()) {
-        case R.id.secure_connect_scan:
-            // Launch the DeviceListActivity to see devices and do scan
-            serverIntent = new Intent(this, DeviceListActivity.class);
-            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
-            return true;
-        case R.id.insecure_connect_scan:
-            // Launch the DeviceListActivity to see devices and do scan
-            serverIntent = new Intent(this, DeviceListActivity.class);
-            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
-            return true;
-        // TODO: delete
-        /*
-        case R.id.discoverable:
-            // Ensure this device is discoverable by others
-            ensureDiscoverable();
-            return true;
-        */
+        if (item.getItemId() == R.id.insecure_connect_scan) {
+          serverIntent = new Intent(this, DeviceListActivity.class);
+          startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+          return true;
         }
+//        switch (item.getItemId()) {
+//        // TODO: delete
+////        case R.id.secure_connect_scan:
+////            // Launch the DeviceListActivity to see devices and do scan
+////            serverIntent = new Intent(this, DeviceListActivity.class);
+////            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
+////            return true;
+//        case R.id.insecure_connect_scan:
+//            // Launch the DeviceListActivity to see devices and do scan
+//            serverIntent = new Intent(this, DeviceListActivity.class);
+//            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+//            return true;
+//        // TODO: delete
+//        /*
+//        case R.id.discoverable:
+//            // Ensure this device is discoverable by others
+//            ensureDiscoverable();
+//            return true;
+//        */
+//        }
         return false;
     }
 

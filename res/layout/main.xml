@@ -19,23 +19,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
-        <Button android:id="@+id/button_on"
-            android:layout_width="wrap_content"
+        android:baselineAligned="true"
+        android:orientation="horizontal" >
+
+        <ToggleButton
+            android:id="@+id/button_on_off"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/turn_on"
-        />
-        <Button android:id="@+id/button_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/turn_off"
-        />
+            android:layout_weight="1"
+            android:textOff="Encender"
+            android:textOn="Apagar" />
         
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/time"
+            android:layout_width="148dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="number" >
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/button_off_when"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Apagar en" />
+
+        <Button
+            android:id="@+id/button_on_when"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Encender en" />
+
+    </LinearLayout>
+
     <ListView android:id="@+id/in"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
