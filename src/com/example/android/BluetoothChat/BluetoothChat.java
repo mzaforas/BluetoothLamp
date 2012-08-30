@@ -72,7 +72,6 @@ public class BluetoothChat extends Activity {
     private ListView mConversationView;
     private EditText mOutEditText;
     private Button mSendButton;
-    private Button onButton;
     private Button offButton;
     private ToggleButton toggleButton;
     
@@ -178,20 +177,15 @@ public class BluetoothChat extends Activity {
         mOutStringBuffer = new StringBuffer("");
         
         // ArduBluetooth extended (mzaforas)
-        onButton = (Button) findViewById(R.id.button_on_when);
-        onButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                sendMessage("t");
-                TextView view = (TextView) findViewById(R.id.time);
-                Integer minutes = Integer.parseInt(view.getText().toString());
-                sendInteger(minutes);
-            }
-        });
-        
         offButton = (Button) findViewById(R.id.button_off_when);
         offButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+            	EditText time = (EditText) findViewById(R.id.time);
+            	Integer minutes = Integer.parseInt(time.getText().toString());
+            	//minutes
                 sendMessage("t");
+                Toast.makeText(v.getContext(), minutes.toString(), Toast.LENGTH_SHORT).show();                
+                sendInteger(minutes);
             }
         });
 
